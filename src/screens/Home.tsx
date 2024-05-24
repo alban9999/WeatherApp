@@ -5,7 +5,7 @@ import { RootState, AppDispatch } from '../redux/store';
 import { fetchWeather } from '../redux/actions/weatherActions';
 import { StackScreenProps } from 'config/types';
 
-const Home: React.FC<StackScreenProps<'Home'>> = () => {
+const Home: React.FC<StackScreenProps<'Home'>> = ({navigation,}) => {
   const [city, setCity] = useState<string>('');
   const dispatch = useDispatch<AppDispatch>();
   const weatherData = useSelector((state: RootState) => state.weather);
@@ -14,6 +14,12 @@ const Home: React.FC<StackScreenProps<'Home'>> = () => {
   const handleSearch = () => {
     dispatch(fetchWeather(city));
   };
+
+  React.useEffect(() => {
+    if (data) {
+      navigation.navigate('WeatherDetails', { data });
+    }
+  }, [data, navigation]);
 
   return (
     <View>
@@ -26,12 +32,6 @@ const Home: React.FC<StackScreenProps<'Home'>> = () => {
       <Button title="Search" onPress={handleSearch} disabled={loading} />
       {loading && <ActivityIndicator />}
       {error && <Text>Error: {error}</Text>}
-      {data && (
-        <View>
-          <Text>Temperature: {data.main.temp}°C</Text>
-          <Text>Weather: {data.weather[0].description}</Text>
-        </View>
-      )}
     </View>
   );
 };
