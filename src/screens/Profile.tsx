@@ -1,11 +1,11 @@
+import { StackScreenProps } from 'config/types';
 import React from 'react';
-import { Button, Text, TouchableOpacity, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 
-const Profile = ({ route, navigation }) => {
-  
+const Profile: React.FC<StackScreenProps<'Profile'>> = ({ route, navigation }) => {
   return (
     <View>
-    <TouchableOpacity onPress={() => navigation.navigate('Home')}><Text>go back</Text></TouchableOpacity>
+    <TouchableOpacity onPress={() => navigation.goBack()}><Text>go back</Text></TouchableOpacity>
     <Text>This is {route.params.name}'s profile</Text>
     </View>
   );
