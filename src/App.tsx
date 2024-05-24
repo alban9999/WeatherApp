@@ -5,7 +5,7 @@ import Home from './screens/Home';
 import { RootStackParamList } from './config/types';
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
-import DetailedWeather from './screens/Profile';
+import DetailedWeather from './screens/DetailedWeather';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
