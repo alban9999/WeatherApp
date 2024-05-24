@@ -1,4 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
+import { fetchWeather } from '../actions/weatherActions';
 
 interface WeatherState {
   loading: boolean;
@@ -15,21 +16,23 @@ const initialState: WeatherState = {
 const weatherSlice = createSlice({
   name: 'weather',
   initialState,
-  reducers: {
-    fetchWeatherStart(state) {
-      state.loading = true;
-    },
-    fetchWeatherSuccess(state, action: PayloadAction<any>) {
-      state.loading = false;
-      state.data = action.payload;
-      state.error = null;
-    },
-    fetchWeatherFailure(state, action: PayloadAction<string>) {
-      state.loading = false;
-      state.error = action.payload;
-    },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchWeather.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchWeather.fulfilled, (state, action) => {
+        state.loading = false;
+        state.data = action.payload;
+        state.error = null;
+      })
+      .addCase(fetchWeather.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      });
   }
 });
 
-export const { fetchWeatherStart, fetchWeatherSuccess, fetchWeatherFailure } = weatherSlice.actions;
 export default weatherSlice.reducer;

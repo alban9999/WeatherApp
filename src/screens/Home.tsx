@@ -15,7 +15,6 @@ const Home: React.FC<StackScreenProps<'Home'>> = () => {
     dispatch(fetchWeather(city));
   };
 
-
   return (
     <View>
       <TextInput

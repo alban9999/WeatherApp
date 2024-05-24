@@ -27,10 +27,8 @@ export const fetchWeather = createAsyncThunk<WeatherApiResponse, string, { rejec
   async (city, { rejectWithValue }) => {
     try {
       const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=f656e4b5f520a242bdf8360dcc896c96`);
-      console.log(response.data);
-      return response.data; // This is where you would validate or transform the data if necessary.
+      return response.data;
     } catch (error: any) {
-      // Handle errors, potentially transforming error data into a more usable format.
       return rejectWithValue(error.response?.data?.message || "Network error");
     }
   }
