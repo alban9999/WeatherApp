@@ -1,8 +1,8 @@
+import { StackScreenProps } from 'config/types';
 import React from 'react';
 import { Button, View, Text } from 'react-native';
 
-
-const Home = ({ navigation }) => {
+const Home: React.FC<StackScreenProps<'Home'>> = ({ navigation }) => {
   return (
     <Button
       title="Go to Jane's profile"
