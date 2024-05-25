@@ -20,9 +20,11 @@ const DetailedWeather: React.FC<StackScreenProps<'WeatherDetails'>> = ({ route }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    display:'flex',
     padding: 16,
     backgroundColor: '#fff',
+    alignItems:'center',
+    justifyContent: 'center'
   },
   title: {
     fontSize: 24,
