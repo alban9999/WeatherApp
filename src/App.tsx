@@ -12,14 +12,12 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 const App = () => {
   return (
     <Provider store={store}>
-      <NavigationContainer >
+      <NavigationContainer>
         <Stack.Navigator 
           screenOptions={{
             headerShown: false,
             contentStyle: {
-              display: 'flex',
-              backgroundColor: 'blue',
-              alignItems: 'center'
+              flex: 1,
             },
         }}>
           <Stack.Screen
@@ -28,7 +26,7 @@ const App = () => {
             options={{title: 'Welcome'}}
           />
           <Stack.Screen 
-            name="WeatherDetails"
+            name="DetailedWeather"
             component={DetailedWeather}
             options={{title: 'Weather Details'}}
           />

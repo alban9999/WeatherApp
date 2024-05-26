@@ -1,16 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { fetchWeather } from '../actions/weatherActions';
-
-interface WeatherState {
-  loading: boolean;
-  data: any;
-  error: string | null;
-}
+import { WeatherState } from '../../config/interfaces';
 
 const initialState: WeatherState = {
   loading: false,
   data: null,
-  error: null
+  error: null,
 };
 
 const weatherSlice = createSlice({
