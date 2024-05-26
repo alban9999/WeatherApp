@@ -11,7 +11,13 @@ const initialState: WeatherState = {
 const weatherSlice = createSlice({
   name: 'weather',
   initialState,
-  reducers: {},
+  reducers: {
+    resetWeather: (state) => {
+      state.loading = false;
+      state.data = null;
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchWeather.pending, (state) => {
@@ -30,4 +36,5 @@ const weatherSlice = createSlice({
   }
 });
 
+export const { resetWeather } = weatherSlice.actions;
 export default weatherSlice.reducer;

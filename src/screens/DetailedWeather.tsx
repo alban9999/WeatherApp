@@ -11,53 +11,65 @@ import {
 } from 'react-native';
 import { StackScreenProps } from 'config/types';
 import WeatherIcon from '../components/icons/WeatherIcon';
+import { BackButton } from '../components/buttons/BackButton';
 
-const DetailedWeather: React.FC<StackScreenProps<'DetailedWeather'>> = ({ route, }) => {
+const DetailedWeather: React.FC<StackScreenProps<'DetailedWeather'>> = ({
+  route,
+  navigation,
+}) => {
   const { data } = route.params;
   const iconCode = data.weather[0].icon;
-  const source = 'https://static5.depositphotos.com/1005091/452/v/450/depositphotos_4525408-stock-illustration-cloudy-sky-background-1.jpg';
+  const source =
+    'https://static5.depositphotos.com/1005091/452/v/450/depositphotos_4525408-stock-illustration-cloudy-sky-background-1.jpg';
   const { width } = useWindowDimensions();
   const isSmallScreen = width < 768;
 
   return (
     <ImageBackground
       blurRadius={Platform.OS == 'web' ? 10 : 2}
-      source={Platform.OS == 'web' ? source : require('../components/images/bg.jpg')}
+      source={
+        Platform.OS == 'web' ? source : require('../components/images/bg.jpg')
+      }
       style={styles.container}
     >
       <SafeAreaView style={styles.container}>
-        <View style={styles.mainContent}>
-          <WeatherIcon iconCode={iconCode} />
-          <Text style={styles.city}>{data.name}</Text>
-          <Text style={styles.temperature}>
-            {(data.main.temp - 273.15).toFixed()}°C
-          </Text>
-          <Text>{data.weather[0].description}</Text>
+        <View>
+          <BackButton navigation={navigation} />
         </View>
-        <View
-          style={
-            isSmallScreen && Platform.OS == 'web' ? styles.column : styles.row
-          }
-        >
-          <View style={styles.box}>
-            <Text>
-              Feels Like: {(data.main.feels_like - 273.15).toFixed()}°C
+        <View style={styles.centeredLayout}>
+          <View style={styles.mainContent}>
+            <WeatherIcon iconCode={iconCode} />
+            <Text style={styles.city}>{data.name}</Text>
+            <Text style={styles.temperature}>
+              {(data.main.temp - 273.15).toFixed()}°C
             </Text>
+            <Text>{data.weather[0].description}</Text>
           </View>
-          <View style={styles.box}>
-            <Text>Humidity: {data.main.humidity}%</Text>
+          <View
+            style={
+              isSmallScreen && Platform.OS == 'web' ? styles.column : styles.row
+            }
+          >
+            <View style={styles.box}>
+              <Text>
+                Feels Like: {(data.main.feels_like - 273.15).toFixed()}°C
+              </Text>
+            </View>
+            <View style={styles.box}>
+              <Text>Humidity: {data.main.humidity}%</Text>
+            </View>
           </View>
-        </View>
-        <View
-          style={
-            isSmallScreen && Platform.OS == 'web' ? styles.column : styles.row
-          }
-        >
-          <View style={styles.box}>
-            <Text>Pressure: {data.main.pressure} hPa</Text>
-          </View>
-          <View style={styles.box}>
-            <Text>Wind: {data.wind.speed} m/s</Text>
+          <View
+            style={
+              isSmallScreen && Platform.OS == 'web' ? styles.column : styles.row
+            }
+          >
+            <View style={styles.box}>
+              <Text>Pressure: {data.main.pressure} hPa</Text>
+            </View>
+            <View style={styles.box}>
+              <Text>Wind: {data.wind.speed} m/s</Text>
+            </View>
           </View>
         </View>
       </SafeAreaView>
@@ -80,14 +92,18 @@ const styles = StyleSheet.create({
       },
     }),
     padding: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
     gap: 10,
   },
   mainContent: {
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 30,
+  },
+  centeredLayout: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
   },
   temperature: { fontSize: 80 },
   city: {
@@ -96,7 +112,7 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     gap: 10,
   },
   column: {
@@ -105,7 +121,7 @@ const styles = StyleSheet.create({
   },
   box: {
     ...Platform.select({
-      web: { minWidth: 200 },
+      web: { minWidth: 200, maxWidth: 400 },
     }),
     flex: 1,
     display: 'flex',
