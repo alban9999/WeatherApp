@@ -1,11 +1,23 @@
 import React, { useState } from 'react';
-import { View, TextInput, Text, ActivityIndicator, Pressable, StyleSheet, Platform } from 'react-native';
+import {
+  View,
+  TextInput,
+  Text,
+  ActivityIndicator,
+  Pressable,
+  StyleSheet,
+  Platform,
+  Dimensions,
+  ImageBackground,
+} from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from '../redux/store';
 import { fetchWeather } from '../redux/actions/weatherActions';
 import { StackScreenProps } from 'config/types';
+import { LogoIcon } from '../components/icons/LogoIcon';
+import { SearchIcon } from '../components/icons/SearchIcon';
 
-const Home: React.FC<StackScreenProps<'Home'>> = ({navigation,}) => {
+const Home: React.FC<StackScreenProps<'Home'>> = ({ navigation }) => {
   const [city, setCity] = useState<string>('');
   const dispatch = useDispatch<AppDispatch>();
   const weatherData = useSelector((state: RootState) => state.weather);
@@ -17,62 +29,80 @@ const Home: React.FC<StackScreenProps<'Home'>> = ({navigation,}) => {
 
   React.useEffect(() => {
     if (data) {
-      navigation.navigate('WeatherDetails', { data });
+      navigation.navigate('DetailedWeather', { data });
     }
   }, [data, navigation]);
 
+  const source =
+    'https://static5.depositphotos.com/1005091/452/v/450/depositphotos_4525408-stock-illustration-cloudy-sky-background-1.jpg';
+
   return (
-    <View style={Platform.OS == 'web' ? styles.webContainer : styles.container}>
-      <Text style={{fontSize: 30, color: 'blue', fontWeight: '700'}}>
-        WeatherApp
-      </Text>
-      <View style={{flexDirection: 'row', gap: 5}}>
+    <ImageBackground
+      blurRadius={Platform.OS == 'web' ? 10 : 2}
+      source={Platform.OS == 'web' ? source : require('../components/images/bg.jpg')}
+      style={styles.container}
+    >
+      <View style={styles.layout}>
+        <LogoIcon />
+        <Text style={styles.title}>Weather app</Text>
+      </View>
+
+      <View style={styles.row}>
         <TextInput
           style={styles.input}
           placeholder="Enter city name"
           onChangeText={setCity}
           value={city}
           editable={!loading}
-          placeholderTextColor={'#ced4da'}
+          placeholderTextColor={'black'}
         />
-        <Pressable onPress={handleSearch} disabled={loading} style={styles.button}>
-          {loading ? <ActivityIndicator /> : <Text style={styles.buttonText}>S</Text>}
+        <Pressable
+          onPress={handleSearch}
+          disabled={loading}
+          style={styles.button}
+        >
+          {loading ? <ActivityIndicator /> : <SearchIcon />}
         </Pressable>
       </View>
       {error && <Text style={styles.errorText}>Error: {error}</Text>}
-    </View>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
-  webContainer: {
-    display: 'flex',
-    width: '100%',
-    padding: 16,
-    backgroundColor: '#f8f9fa',
+  container: {
+    ...Platform.select({
+      ios: {
+        flex: 1,
+      },
+      android: {
+        flex: 1,
+      },
+      web: {
+        display: 'flex',
+        height: Dimensions.get('window').height,
+      },
+    }),
+    padding: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    gap: 10,
-  },
-  container: {
-    padding: 16,
-    backgroundColor: '#f8f9fa',
-    justifyContent: 'center',
+    gap: 30,
   },
   input: {
-    borderColor: '#ced4da',
-    borderWidth: 1,
-    borderRadius: 4,
+    flex: 1,
+    minWidth: 300,
+    borderRadius: 20,
     paddingHorizontal: 8,
+    backgroundColor: 'white',
   },
   button: {
-    backgroundColor: '#007bff',
-    borderRadius: 4,
+    backgroundColor: 'white',
+    borderRadius: 20,
     paddingVertical: 10,
     paddingHorizontal: 12,
   },
   buttonText: {
-    color: '#fff',
+    color: 'black',
     fontSize: 16,
   },
   errorText: {
@@ -80,6 +110,9 @@ const styles = StyleSheet.create({
     marginTop: 16,
     textAlign: 'center',
   },
+  row: { flexDirection: 'row', gap: 5 },
+  title: { fontSize: 30, color: '#007DB9', fontWeight: '700' },
+  layout: { alignItems: 'center', gap: 10 },
 });
 
 export default Home;

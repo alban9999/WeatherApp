@@ -1,35 +1,117 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import {
+  View,
+  SafeAreaView,
+  Text,
+  StyleSheet,
+  Platform,
+  Dimensions,
+  ImageBackground,
+  useWindowDimensions,
+} from 'react-native';
 import { StackScreenProps } from 'config/types';
+import WeatherIcon from '../components/icons/WeatherIcon';
 
-const DetailedWeather: React.FC<StackScreenProps<'WeatherDetails'>> = ({ route }) => {
+const DetailedWeather: React.FC<StackScreenProps<'DetailedWeather'>> = ({ route, }) => {
   const { data } = route.params;
+  const iconCode = data.weather[0].icon;
+  const source = 'https://static5.depositphotos.com/1005091/452/v/450/depositphotos_4525408-stock-illustration-cloudy-sky-background-1.jpg';
+  const { width } = useWindowDimensions();
+  const isSmallScreen = width < 768;
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Weather Details for {data.name}</Text>
-      <Text>Temperature: {(data.main.temp - 273.15).toFixed(2)}°C</Text>
-      <Text>Feels Like: {(data.main.feels_like - 273.15).toFixed(2)}°C</Text>
-      <Text>Weather: {data.weather[0].description}</Text>
-      <Text>Humidity: {data.main.humidity}%</Text>
-      <Text>Pressure: {data.main.pressure} hPa</Text>
-      <Text>Wind Speed: {data.wind.speed} m/s</Text>
-    </View>
+    <ImageBackground
+      blurRadius={Platform.OS == 'web' ? 10 : 2}
+      source={Platform.OS == 'web' ? source : require('../components/images/bg.jpg')}
+      style={styles.container}
+    >
+      <SafeAreaView style={styles.container}>
+        <View style={styles.mainContent}>
+          <WeatherIcon iconCode={iconCode} />
+          <Text style={styles.city}>{data.name}</Text>
+          <Text style={styles.temperature}>
+            {(data.main.temp - 273.15).toFixed()}°C
+          </Text>
+          <Text>{data.weather[0].description}</Text>
+        </View>
+        <View
+          style={
+            isSmallScreen && Platform.OS == 'web' ? styles.column : styles.row
+          }
+        >
+          <View style={styles.box}>
+            <Text>
+              Feels Like: {(data.main.feels_like - 273.15).toFixed()}°C
+            </Text>
+          </View>
+          <View style={styles.box}>
+            <Text>Humidity: {data.main.humidity}%</Text>
+          </View>
+        </View>
+        <View
+          style={
+            isSmallScreen && Platform.OS == 'web' ? styles.column : styles.row
+          }
+        >
+          <View style={styles.box}>
+            <Text>Pressure: {data.main.pressure} hPa</Text>
+          </View>
+          <View style={styles.box}>
+            <Text>Wind: {data.wind.speed} m/s</Text>
+          </View>
+        </View>
+      </SafeAreaView>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    display:'flex',
+    ...Platform.select({
+      ios: {
+        flex: 1,
+      },
+      android: {
+        flex: 1,
+      },
+      web: {
+        display: 'flex',
+        height: Dimensions.get('window').height,
+      },
+    }),
     padding: 16,
-    backgroundColor: '#fff',
-    alignItems:'center',
-    justifyContent: 'center'
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 16,
+  mainContent: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 30,
+  },
+  temperature: { fontSize: 80 },
+  city: {
+    fontSize: 30,
+    fontWeight: '500',
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: 10,
+  },
+  column: {
+    flexDirection: 'column',
+    gap: 10,
+  },
+  box: {
+    ...Platform.select({
+      web: { minWidth: 200 },
+    }),
+    flex: 1,
+    display: 'flex',
+    padding: 15,
+    backgroundColor: 'rgba(255, 255, 255, 0.6)',
+    borderRadius: 15,
   },
 });
 
