@@ -6,6 +6,7 @@ import { RootStackParamList } from './config/types';
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
 import DetailedWeather from './screens/DetailedWeather';
+import { NotFound } from './screens/NotFound';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -29,6 +30,11 @@ const App = () => {
             name="DetailedWeather"
             component={DetailedWeather}
             options={{title: 'Weather Details'}}
+          />
+          <Stack.Screen 
+            name="NotFound"
+            component={NotFound}
+            options={{title: 'Not Found'}}
           />
         </Stack.Navigator>
       </NavigationContainer>

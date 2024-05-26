@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   View,
   TextInput,
@@ -16,12 +16,25 @@ import { fetchWeather } from '../redux/actions/weatherActions';
 import { StackScreenProps } from 'config/types';
 import { LogoIcon } from '../components/icons/LogoIcon';
 import { SearchIcon } from '../components/icons/SearchIcon';
+import { useFocusEffect } from '@react-navigation/native';
+import { resetWeather } from '../redux/reducers/weatherReducer';
 
 const Home: React.FC<StackScreenProps<'Home'>> = ({ navigation }) => {
   const [city, setCity] = useState<string>('');
   const dispatch = useDispatch<AppDispatch>();
   const weatherData = useSelector((state: RootState) => state.weather);
   const { loading, data, error } = weatherData;
+
+  const resetState = useDispatch();
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        resetState(resetWeather());
+        setCity('');
+      };
+    }, [dispatch])
+  );
 
   const handleSearch = () => {
     dispatch(fetchWeather(city));
@@ -30,8 +43,10 @@ const Home: React.FC<StackScreenProps<'Home'>> = ({ navigation }) => {
   React.useEffect(() => {
     if (data) {
       navigation.navigate('DetailedWeather', { data });
+    } else if (error) {
+      navigation.navigate('NotFound', { errorMsg: error });
     }
-  }, [data, navigation]);
+  }, [data, error, navigation]);
 
   const source =
     'https://static5.depositphotos.com/1005091/452/v/450/depositphotos_4525408-stock-illustration-cloudy-sky-background-1.jpg';
@@ -64,7 +79,6 @@ const Home: React.FC<StackScreenProps<'Home'>> = ({ navigation }) => {
           {loading ? <ActivityIndicator /> : <SearchIcon />}
         </Pressable>
       </View>
-      {error && <Text style={styles.errorText}>Error: {error}</Text>}
     </ImageBackground>
   );
 };
