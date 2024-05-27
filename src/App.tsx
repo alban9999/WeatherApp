@@ -10,10 +10,21 @@ import { NotFound } from './screens/NotFound';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
+const linking = {
+  prefixes: ['http://localhost:3000'],
+  config: {
+    screens: {
+      Home: '',
+      DetailedWeather: 'weather/:city',
+      NotFound: 'error',
+    },
+  },
+};
+
 const App = () => {
   return (
     <Provider store={store}>
-      <NavigationContainer>
+      <NavigationContainer linking={linking}>
         <Stack.Navigator 
           screenOptions={{
             headerShown: false,
