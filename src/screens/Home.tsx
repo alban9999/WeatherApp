@@ -55,25 +55,24 @@ const Home: React.FC<StackScreenProps<'Home'>> = ({ navigation }) => {
   }, []);
 
   const handleSearch = async () => {
-    if (city) {
-      dispatch(fetchWeather(city));
-      try {
-        const savedCities = JSON.parse(
-          (await AsyncStorage.getItem('searchedCities')) || '[]',
-        );
-        if (!savedCities.includes(city)) {
-          savedCities.push(city);
-          await AsyncStorage.setItem(
-            'searchedCities',
-            JSON.stringify(savedCities),
-          );
-          setSuggestions(savedCities);
-        }
+    dispatch(fetchWeather(city));
+    try {
+      const savedCities = JSON.parse(
+        (await AsyncStorage.getItem('searchedCities')) || '[]',
+      );
 
-        setCity('');
-      } catch (error) {
-        console.error('Failed to save city', error);
+      if (city && !savedCities.includes(city)) {
+        savedCities.push(city);
+        await AsyncStorage.setItem(
+          'searchedCities',
+          JSON.stringify(savedCities),
+        );
+        setSuggestions(savedCities);
       }
+
+      setCity('');
+    } catch (error) {
+      console.error('Failed to save city', error);
     }
   };
 
