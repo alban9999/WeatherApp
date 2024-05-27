@@ -30,6 +30,13 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 8,
     backgroundColor: 'white',
   },
+  input2: {
+    flex: 1,
+    minWidth: 300,
+    padding: 10,
+    backgroundColor: 'white',
+    borderWidth: 1,
+  },
   button: {
     backgroundColor: 'white',
     borderRadius: 20,
@@ -48,4 +55,5 @@ export const styles = StyleSheet.create({
   row: { flexDirection: 'row', gap: 5 },
   title: { fontSize: 30, color: '#007DB9', fontWeight: '700' },
   layout: { alignItems: 'center', gap: 10 },
+  list: {position: 'absolute', marginTop: 50,},
 });
