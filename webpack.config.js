@@ -30,6 +30,18 @@ module.exports = {
           },
         ],
       },
+      {
+        test: /\.(gif|jpe?g|png|svg)$/,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 8192,
+              name: 'static/media/[name].[hash:8].[ext]',
+            },
+          },
+        ],
+      },
     ],
   },
   resolve: {
@@ -59,7 +71,7 @@ module.exports = {
   ],
   devServer: {
     static: path.join(__dirname, 'dist'),
-    compress: true,
+    compress: false,
     port: 3000,
   },
 };

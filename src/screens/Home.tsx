@@ -5,9 +5,7 @@ import {
   Text,
   ActivityIndicator,
   Pressable,
-  StyleSheet,
   Platform,
-  Dimensions,
   ImageBackground,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,6 +16,7 @@ import { LogoIcon } from '../components/icons/LogoIcon';
 import { SearchIcon } from '../components/icons/SearchIcon';
 import { useFocusEffect } from '@react-navigation/native';
 import { resetWeather } from '../redux/reducers/weatherReducer';
+import { styles } from '../styles/Home.styles';
 
 const Home: React.FC<StackScreenProps<'Home'>> = ({ navigation }) => {
   const [city, setCity] = useState<string>('');
@@ -82,51 +81,5 @@ const Home: React.FC<StackScreenProps<'Home'>> = ({ navigation }) => {
     </ImageBackground>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    ...Platform.select({
-      ios: {
-        flex: 1,
-      },
-      android: {
-        flex: 1,
-      },
-      web: {
-        display: 'flex',
-        height: Dimensions.get('window').height,
-      },
-    }),
-    padding: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: 30,
-  },
-  input: {
-    flex: 1,
-    minWidth: 300,
-    borderRadius: 20,
-    paddingHorizontal: 8,
-    backgroundColor: 'white',
-  },
-  button: {
-    backgroundColor: 'white',
-    borderRadius: 20,
-    paddingVertical: 10,
-    paddingHorizontal: 12,
-  },
-  buttonText: {
-    color: 'black',
-    fontSize: 16,
-  },
-  errorText: {
-    color: '#dc3545',
-    marginTop: 16,
-    textAlign: 'center',
-  },
-  row: { flexDirection: 'row', gap: 5 },
-  title: { fontSize: 30, color: '#007DB9', fontWeight: '700' },
-  layout: { alignItems: 'center', gap: 10 },
-});
 
 export default Home;
