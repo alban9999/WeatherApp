@@ -42,7 +42,7 @@ const Home: React.FC<StackScreenProps<'Home'>> = ({ navigation }) => {
 
   React.useEffect(() => {
     if (data) {
-      navigation.navigate('DetailedWeather', { data });
+      navigation.navigate('DetailedWeather', { data, city });
     } else if (error) {
       navigation.navigate('NotFound', { errorMsg: error });
     }
